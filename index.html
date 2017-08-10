@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title> forecast.io-API-jQuery </title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href='https://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" media="screen" href="css/main.css"/>	
+</head>
+<body>
+	<h1>Weather</h1>
+	<ul>
+		<li><strong>Icon:</strong> <canvas height="100" width="100" id="icon"></canvas></li>
+		<li><strong>Temperature:</strong> <span id="temp"></span>°C</li>
+		<li><strong>Summary:</strong> <span id="summary"></span></li>
+		<li><strong>Wind:</strong> <span id="wind"></span> m/s <span id="wind_direction">↑</span></li>
+		<li><strong>Humidity:</strong> <span id="humidity"></span>%</li>
+		<li><strong>UV Index:</strong> <span id="uv"></span></li>
+		<li><strong>dew Point:</strong> <span id="dewPoint"></span>˚</li>
+		<li><strong>Visibility:</strong> <span id="visibility"></span> km</li>
+		<li><strong>Pressure:</strong> <span id="pressure"></span> hPa</li>
+		<li><strong>Ozone:</strong> <span id="ozone"></span></li>
+	</ul>
+
+
+<script language="javascript" type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script> 
+<script type="text/javascript"  src="https://cdnjs.cloudflare.com/ajax/libs/skycons/1396634940/skycons.js"></script>
+<script language="javascript">
+	
+	// Global Variables.
+	var url = 'https://api.forecast.io/forecast/';
+	var apiKey = 'YOUR API KEY HERE';
+	var units = 'si';
+	var language = 'en';
+	var latitude = 51.5073;
+	var longitude = -0.1276;
+	
+	// API forecast.io.
+	function weather()
+		{
+		$(function() {
+			var data, uv_class, wind_direction;
+			
+			$.getJSON(url + apiKey + "/" + latitude + "," + longitude + "?units=si&lang=en&callback=?", function(data) {
+			
+				var uv = data.currently.uvIndex;
+								
+				if(uv >=0 && uv <=2)
+					uv_class = "uv0";
+				else if(uv >=3 && uv <=5)
+					uv_class = "uv1";
+				else if(uv >=6 && uv <=7)
+					uv_class = "uv2";
+				else if(uv >=8 && uv <=10)
+					uv_class = "uv3";
+				else
+					uv_class = "uv4";
+				
+				$('#temp').html(Math.round(data.currently.temperature));
+				$('#humidity').html(Math.round(data.currently.humidity*100));
+				$('#wind').html(Math.round(data.currently.windSpeed));
+				$('#uv').attr('class', uv_class);
+				$('#uv').html(uv);
+				$('#summary').html(data.currently.summary);
+				$('#dewPoint').html(data.currently.dewPoint);
+				$('#visibility').html(data.currently.visibility);
+				$('#pressure').html(data.currently.pressure);
+				$('#ozone').html(data.currently.ozone);				
+				
+				wind_direction = data.currently.windBearing/2;
+				$('#wind_direction').css({ 'display':'inline-block', '-webkit-transform': 'rotate('+wind_direction+'deg)', 'transform': 'rotate('+wind_direction+'deg)' });
+
+				var skycons = new Skycons({"color": "#000000"});
+				skycons.add("icon", data.currently.icon);
+				skycons.play();
+			});
+		});
+	}
+	
+	weather();
+	// Get weather every 10 min.
+	setInterval( weather, 600000 );
+</script>
+
+</body></html>

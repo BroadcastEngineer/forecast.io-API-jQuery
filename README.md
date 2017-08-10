@@ -4,7 +4,7 @@
 # Overview
 Retrieve data from forecast.io API using Javascript and jQuery.
 
-# Important Variable
+# Important Variables
 ```var url = 'https://api.forecast.io/forecast/';
 var apiKey = 'YOUR API KEY HERE';
 var units = 'si';

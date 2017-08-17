@@ -42,7 +42,7 @@
 		$(function() {
 			var data, uv_class, wind_direction;
 			
-			$.getJSON(url + apiKey + "/" + latitude + "," + longitude + "?units=si&lang=en&callback=?", function(data) {
+			$.getJSON(url + apiKey + "/" + latitude + "," + longitude + "?units="+units+"&lang="+language+"&callback=?", function(data) {
 			
 				var uv = data.currently.uvIndex;
 								
